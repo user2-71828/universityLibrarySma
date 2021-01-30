@@ -11,12 +11,15 @@ public class LibrarianClerkGui extends LibrarianGui{
 
 
     private JTextField bookTitleField;
+    private JComboBox subjectComboBox;
+    private JButton addBookButton;
     private JTextField authorField;
-    private JComboBox<Subject> subjectField;
     private JTextField unitPriceField;
     private JTextField totalQuantityField;
     private JTextField soldQuantityField;
     private JTextField borrowedQuantityField;
+
+    private JPanel bookForm;
 
     public LibrarianClerkGui(Librarian librarianClerk) {
         super(librarianClerk);
@@ -26,7 +29,7 @@ public class LibrarianClerkGui extends LibrarianGui{
         System.out.println("Advertising the Product ...");
         String bookTitle = bookTitleField.getText();
         String author = authorField.getText();
-        Subject subject = Subject.valueOf(subjectField.getSelectedItem().toString());
+        Subject subject = Subject.valueOf(subjectComboBox.getSelectedItem().toString());
         try {
             Double unitPrice = Double.parseDouble(unitPriceField.getText());
             Integer totalQuantity = Integer.parseInt(totalQuantityField.getText());
@@ -48,9 +51,9 @@ public class LibrarianClerkGui extends LibrarianGui{
         JPanel footerPanel = new JPanel();
         frame.getContentPane().add(footerPanel, BorderLayout.SOUTH);
 
-        JButton advertiseBtn = new JButton("Add Book");
-        advertiseBtn.addActionListener(e -> addBookHandler());
-        footerPanel.add(advertiseBtn);
+        JButton addBookBtn = new JButton("Add Book");
+        addBookBtn.addActionListener(e -> addBookHandler());
+        footerPanel.add(addBookBtn);
 
 //        JButton createConsumerBtn = new JButton("Create consumer Agent");
 //        createConsumerBtn.addActionListener(e -> createConsumerHandler());
@@ -63,7 +66,8 @@ public class LibrarianClerkGui extends LibrarianGui{
 
         //region Book Form
         JPanel bookPanel = new JPanel();
-        mainContentPanel.add(bookPanel);
+
+        mainContentPanel.add(bookForm);
         bookPanel.setLayout(new GridLayout(10, 0, 0, 0));
 
         //region Book Title
@@ -114,7 +118,7 @@ public class LibrarianClerkGui extends LibrarianGui{
         authorLabel.setHorizontalAlignment(SwingConstants.CENTER);
         bookPanel.add(authorLabel);
 
-        subjectField = new JComboBox<>();
+        subjectComboBox = new JComboBox<>();
         authorField.setHorizontalAlignment(SwingConstants.CENTER);
         bookPanel.add(authorField);
         authorField.setColumns(10);
