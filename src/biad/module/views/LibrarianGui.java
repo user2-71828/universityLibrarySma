@@ -1,16 +1,19 @@
 package biad.module.views;
 
+import biad.module.SubscribersContainer;
 import biad.module.agents.Librarian;
+import jade.wrapper.ContainerController;
 
 import javax.swing.*;
 
 public abstract class LibrarianGui {
     protected JFrame frame;
     protected Librarian librarian;
+    protected ContainerController subscribersContainer;
 
     public LibrarianGui(Librarian librarian) {
         this.librarian = librarian;
-        initialize();
+
     }
 
     protected abstract void initialize() ;

@@ -23,6 +23,9 @@ public class Subscription {
     public void addInterest(String objectOfInterest, InterestType interestType){
         interests.add(new Interest(objectOfInterest,interestType));
     }
+    public void addInterests(List<Interest> interests){
+        this.interests.addAll(interests);
+    }
 
     public boolean isInterestedInBook(Book book) {
        return interests.stream().anyMatch(interest -> interest.isObjectOfInterest(book));

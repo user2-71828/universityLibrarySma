@@ -12,7 +12,9 @@ import jade.wrapper.StaleProxyException;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Librarian extends Agent {
     private LibrarianGui window;
@@ -95,9 +97,8 @@ public class Librarian extends Agent {
         String subscriberName = (String) subscriberArgs[1];
         var subscriber = container.createNewAgent(subscriberName,Student.class.getName(),subscriberArgs);
         subscriber.start();
-        var state = subscriber.getState();
-//        Subscription subscription = new Subscription();
-//        subscribers.add(student);
+
+
     }
 
     public void addBook(Book book) {

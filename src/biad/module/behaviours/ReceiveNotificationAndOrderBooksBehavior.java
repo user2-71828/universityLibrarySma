@@ -4,6 +4,7 @@ import biad.module.agents.Student;
 import biad.module.beans.Book;
 import biad.module.beans.Order;
 import biad.module.beans.OrderType;
+import biad.module.util.EncodingAndDecodingUtil;
 import jade.core.behaviours.CyclicBehaviour;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
@@ -37,8 +38,10 @@ public class ReceiveNotificationAndOrderBooksBehavior extends CyclicBehaviour {
 
     private Order generateOrderForBooksOfInterest(ACLMessage message) {
         try {
-            List<Book> booksOfInterest = (List<Book>) message.getContentObject();
-            System.out.println("message content (books of interest): " + booksOfInterest);
+            var content = message.getContentObject();
+            Object obj = EncodingAndDecodingUtil.decode((byte[]) content);
+            List<Book> booksOfInterest = (List<Book>) obj;
+                    System.out.println("message content (books of interest): " + booksOfInterest);
             Student subscriber = (Student) myAgent;
 
             var order = new Order(OrderType.Loan,subscriber);
@@ -59,7 +62,8 @@ public class ReceiveNotificationAndOrderBooksBehavior extends CyclicBehaviour {
         ACLMessage reply = message.createReply();
         reply.setPerformative(performative);
         try {
-            reply.setContentObject(order);
+            byte [] content = EncodingAndDecodingUtil.encode(order);
+            reply.setContentObject(content);
         } catch (IOException e) {
             e.printStackTrace();
         }

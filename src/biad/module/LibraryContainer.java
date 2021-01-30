@@ -1,8 +1,12 @@
 package biad.module;
 
+import biad.module.beans.Book;
 import jade.core.ProfileImpl;
 import jade.core.Runtime;
 import jade.wrapper.ContainerController;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class LibraryContainer {
     private ContainerController container;

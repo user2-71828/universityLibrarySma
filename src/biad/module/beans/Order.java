@@ -54,4 +54,14 @@ public class Order implements Serializable {
     public void setProcessed(boolean processed) {
         isProcessed = processed;
     }
+
+    @Override
+    public String toString() {
+        return "Order{" +
+                "orderItems=" + orderItems +
+                ", orderType=" + orderType +
+                ", customer=" + customer +
+                ", isProcessed=" + isProcessed +
+                '}';
+    }
 }

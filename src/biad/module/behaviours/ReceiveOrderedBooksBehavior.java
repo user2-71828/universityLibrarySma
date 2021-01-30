@@ -4,6 +4,7 @@ import biad.module.agents.Student;
 import biad.module.beans.Book;
 import biad.module.beans.Order;
 import biad.module.beans.OrderType;
+import biad.module.util.EncodingAndDecodingUtil;
 import jade.core.behaviours.CyclicBehaviour;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
@@ -16,7 +17,7 @@ public class ReceiveOrderedBooksBehavior extends CyclicBehaviour {
     public void action() {
         ACLMessage message = receiveMessage(ACLMessage.AGREE);
         if (message != null) {
-            System.out.println("Received an INFORM message");
+            System.out.println(myAgent+" Received an Agree message from "+message.getSender());
             receiveOrderedBooks(message);
 
         } else {
@@ -32,8 +33,14 @@ public class ReceiveOrderedBooksBehavior extends CyclicBehaviour {
     }
     private void receiveOrderedBooks(ACLMessage message){
         try {
+            /**
+             * Decode and deserialize order
+             * */
+            byte[] content= (byte[]) message.getContentObject();
+            Object obj = EncodingAndDecodingUtil.decode(content);
+            Order order = (Order) obj;
+            System.out.println(myAgent+"Received Order "+order);
 
-            Order order = (Order) message.getContentObject();
             Student subscriber = (Student) myAgent;
             if (order.isProcessed()) {
                 if (order.getOrderType() == OrderType.Purchase){

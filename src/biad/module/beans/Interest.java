@@ -33,4 +33,12 @@ public class Interest {
         return (this.objectOfInterest.equals(interest.objectOfInterest) &&
                 this.interestType.equals(interest.interestType));
     }
+
+    @Override
+    public String toString() {
+        return "Interest{" +
+                "objectOfInterest='" + objectOfInterest + '\'' +
+                ", interestType=" + interestType +
+                '}';
+    }
 }

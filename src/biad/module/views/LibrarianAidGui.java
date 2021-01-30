@@ -1,12 +1,20 @@
 package biad.module.views;
 
 import biad.module.agents.Librarian;
+import biad.module.agents.Student;
 import biad.module.beans.Department;
+import biad.module.beans.Interest;
+import biad.module.beans.InterestType;
 import biad.module.beans.Subject;
+import jade.wrapper.ContainerController;
 import jade.wrapper.StaleProxyException;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class LibrarianAidGui extends LibrarianGui {
 
@@ -19,9 +27,11 @@ public class LibrarianAidGui extends LibrarianGui {
     private JButton addInterestButton;
     private JList interestsList;
     private JPanel studentRegistrationPanel;
+    private List<Interest> interests = new ArrayList<>() ;
 
     public LibrarianAidGui(Librarian librarianAid) {
         super(librarianAid);
+        initialize();
     }
 
     private void registerSubscriberHandler() {
@@ -34,14 +44,26 @@ public class LibrarianAidGui extends LibrarianGui {
             Object[] subscriberArgs = {
                     studentId,
                     studentName,
-                    department
+                    department,
+                    interests,
+                    this.librarian.getSubscribers()
             };
+
             this.librarian.register(subscriberArgs);
 
         } catch (StaleProxyException e) {
             showErrorAlert("Stale Proxy Exception");
             e.printStackTrace();
         }
+    }
+    private void addInterest(){
+        if (interests == null) interests = new ArrayList<>();
+        String interestName = interestField.getText();
+        InterestType interestType = InterestType.valueOf(interestTypeComboBox.getSelectedItem().toString());
+        Interest interest = new Interest(interestName,interestType);
+        interests.add(interest);
+        ((DefaultListModel)interestsList.getModel()).addElement(interest);
+
     }
 
     @Override
@@ -54,14 +76,15 @@ public class LibrarianAidGui extends LibrarianGui {
         JPanel footerPanel = new JPanel();
         frame.getContentPane().add(footerPanel, BorderLayout.SOUTH);
 
-//        JButton advertiseBtn = new JButton("Advertise");
-//        advertiseBtn.addActionListener(e -> advertiseProductHandler());
-//        footerPanel.add(advertiseBtn);
-//
-//        JButton createConsumerBtn = new JButton("Create consumer Agent");
-//        createConsumerBtn.addActionListener(e -> createConsumerHandler());
 //        footerPanel.add(createConsumerBtn);
 
+        departmentField.setModel(new DefaultComboBoxModel<>(Department.values()));
+        interestTypeComboBox.setModel(new DefaultComboBoxModel(InterestType.values()));
+        registerButton.addActionListener(e -> registerSubscriberHandler());
+        addInterestButton.addActionListener(e -> addInterest());
+        DefaultListModel model = new DefaultListModel();
+        model.addAll(interests);
+        interestsList.setModel(model);
         frame.getContentPane().add(studentRegistrationPanel, BorderLayout.CENTER);
     }
 

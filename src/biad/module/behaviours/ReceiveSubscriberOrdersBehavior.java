@@ -1,17 +1,13 @@
 package biad.module.behaviours;
 
 import biad.module.agents.Librarian;
-import biad.module.beans.Book;
 import biad.module.beans.Order;
+import biad.module.util.EncodingAndDecodingUtil;
 import jade.core.behaviours.CyclicBehaviour;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 
 import java.io.IOException;
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
 
 
 public class ReceiveSubscriberOrdersBehavior extends CyclicBehaviour {
@@ -20,7 +16,10 @@ public class ReceiveSubscriberOrdersBehavior extends CyclicBehaviour {
 		ACLMessage message = receiveMessage(ACLMessage.REQUEST);		
 		try {
 			if (message != null) { 
-				Order order = (Order)message.getContentObject();
+				byte[] content= (byte[]) message.getContentObject();
+				Object obj = EncodingAndDecodingUtil.decode(content);
+				Order order = (Order) obj;
+
 				System.out.println("Receiving order :" + order.toString());
 				Librarian librarian = (Librarian) myAgent;
 				String customerName = message.getSender().getName();
@@ -54,8 +53,19 @@ public class ReceiveSubscriberOrdersBehavior extends CyclicBehaviour {
 		ACLMessage reply = message.createReply();
 		reply.setPerformative(performative);
 		try {
-			reply.setContentObject(processedOrder);
+			/**
+			 * Encoding in base 64 to avoid this error from jade platform
+			 * 	===== E R R O R !!! =======
+			 *
+			 * Missing support for Base64 conversions
+			 * Please refer to the documentation for details.
+			 * =============================================
+			 * */
+
+			byte[] content = EncodingAndDecodingUtil.encode(processedOrder);
+			reply.setContentObject(content);
 			reply.setOntology("book-catalogue");
+			reply.setLanguage("english");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

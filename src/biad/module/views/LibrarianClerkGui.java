@@ -3,6 +3,7 @@ package biad.module.views;
 import biad.module.agents.Librarian;
 import biad.module.beans.Book;
 import biad.module.beans.Subject;
+import jade.wrapper.ContainerController;
 
 import javax.swing.*;
 import java.awt.*;
@@ -23,10 +24,11 @@ public class LibrarianClerkGui extends LibrarianGui{
 
     public LibrarianClerkGui(Librarian librarianClerk) {
         super(librarianClerk);
+        initialize();
     }
 
     private void addBookHandler() {
-        System.out.println("Advertising the Product ...");
+        System.out.println("Notifying Subscribers  ...");
         String bookTitle = bookTitleField.getText();
         String author = authorField.getText();
         Subject subject = Subject.valueOf(subjectComboBox.getSelectedItem().toString());
@@ -44,122 +46,17 @@ public class LibrarianClerkGui extends LibrarianGui{
     @Override
     protected void initialize() {
         frame = new JFrame();
-        frame.setBounds(100, 100, 450, 300);
+        frame.setBounds(100, 100, 600, 500);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.getContentPane().setLayout(new BorderLayout(0, 0));
 
         JPanel footerPanel = new JPanel();
         frame.getContentPane().add(footerPanel, BorderLayout.SOUTH);
 
-        JButton addBookBtn = new JButton("Add Book");
-        addBookBtn.addActionListener(e -> addBookHandler());
-        footerPanel.add(addBookBtn);
-
-//        JButton createConsumerBtn = new JButton("Create consumer Agent");
-//        createConsumerBtn.addActionListener(e -> createConsumerHandler());
-//        footerPanel.add(createConsumerBtn);
-
-        JPanel mainContentPanel = new JPanel();
-        frame.getContentPane().add(mainContentPanel, BorderLayout.CENTER);
-        mainContentPanel.setLayout(new GridLayout(1, 0, 0, 0));
+        addBookButton.addActionListener(e -> addBookHandler());
+        subjectComboBox.setModel(new DefaultComboBoxModel(Subject.values()));
+        frame.getContentPane().add(bookForm, BorderLayout.CENTER);
 
 
-        //region Book Form
-        JPanel bookPanel = new JPanel();
-
-        mainContentPanel.add(bookForm);
-        bookPanel.setLayout(new GridLayout(10, 0, 0, 0));
-
-        //region Book Title
-        JLabel bookTitleLabel = new JLabel("Book Title");
-        bookTitleLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        bookPanel.add(bookTitleLabel);
-
-        bookTitleField = new JTextField();
-        bookTitleField.setHorizontalAlignment(SwingConstants.CENTER);
-        bookPanel.add(bookTitleField);
-        bookTitleField.setColumns(10);
-        //endregion
-
-        //region Author
-        JLabel authorLabel = new JLabel("Author");
-        authorLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        bookPanel.add(authorLabel);
-
-        authorField = new JTextField();
-        authorField.setHorizontalAlignment(SwingConstants.CENTER);
-        bookPanel.add(authorField);
-        authorField.setColumns(10);
-        //endregion
-
-        //region Unit Price
-        JLabel unitPriceLabel = new JLabel("Unit Price");
-        unitPriceLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        bookPanel.add(unitPriceLabel);
-
-        unitPriceField = new JTextField();
-        unitPriceField.setHorizontalAlignment(SwingConstants.CENTER);
-        bookPanel.add(unitPriceField);
-        unitPriceField.setColumns(10);
-        //endregion
-
-        //region Total Quantity
-        JLabel totalQuantityLabel = new JLabel("Total Quantity");
-        totalQuantityLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        bookPanel.add(totalQuantityLabel);
-
-        totalQuantityField = new JTextField();
-        totalQuantityField.setHorizontalAlignment(SwingConstants.CENTER);
-        bookPanel.add(totalQuantityField);
-        totalQuantityField.setColumns(10);
-        //endregion
-
-        JLabel subjectLabel = new JLabel("Subject");
-        authorLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        bookPanel.add(authorLabel);
-
-        subjectComboBox = new JComboBox<>();
-        authorField.setHorizontalAlignment(SwingConstants.CENTER);
-        bookPanel.add(authorField);
-        authorField.setColumns(10);
-        //endregion
-
-
-
-        JPanel reportingPanel = new JPanel();
-        mainContentPanel.add(reportingPanel);
-        reportingPanel.setLayout(new GridLayout(6, 0, 0, 0));
-
-
-
-        JLabel amountOfProfitLabel = new JLabel("Sold quantity");
-        amountOfProfitLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        reportingPanel.add(amountOfProfitLabel);
-
-        soldQuantityField = new JTextField();
-        soldQuantityField.setHorizontalAlignment(SwingConstants.CENTER);
-        soldQuantityField.setEditable(false);
-        soldQuantityField.setText("0");
-        reportingPanel.add(soldQuantityField);
-        soldQuantityField.setColumns(10);
-
-        JLabel borrowedQuantityLabel = new JLabel("Borrowed Quantity");
-        borrowedQuantityLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        reportingPanel.add(borrowedQuantityLabel);
-
-        borrowedQuantityField = new JTextField();
-        borrowedQuantityField.setHorizontalAlignment(SwingConstants.CENTER);
-        borrowedQuantityField.setEditable(false);
-        borrowedQuantityField.setText("0");
-        reportingPanel.add(borrowedQuantityField);
-        borrowedQuantityField.setColumns(10);
-
-        JPanel topPanel = new JPanel();
-        frame.getContentPane().add(topPanel, BorderLayout.NORTH);
-
-        JLabel label = new JLabel("Librarian Clerk GUI");
-        label.setHorizontalAlignment(SwingConstants.CENTER);
-        label.setFont(new Font("Tahoma", Font.PLAIN, 24));
-        topPanel.add(label);
     }
 }
